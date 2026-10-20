@@ -1,0 +1,17 @@
+{
+  "name": "claude-code-inline-images",
+  "owner": {
+    "name": "Nicolò Pignatelli",
+    "url": "https://github.com/nicolopignatelli"
+  },
+  "metadata": {
+    "description": "The inline-images mod for Claude Code: annotated screenshots and frames, shown inline in the conversation."
+  },
+  "plugins": [
+    {
+      "name": "inline-images",
+      "source": "./",
+      "description": "Lets Claude show a screenshot or frame inline in the conversation, cropped and annotated with boxes and arrows."
+    }
+  ]
+}

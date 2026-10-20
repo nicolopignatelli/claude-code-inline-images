@@ -1,0 +1,11 @@
+{
+  // The engine lays .claude-plugin/types/ when it loads the mod from a folder.
+  "extends": "./.claude-plugin/types/tsconfig.json",
+  "compilerOptions": {
+    // Pixel loops index typed arrays on every line; the check would only add
+    // a non-null assertion to each of them.
+    "noUncheckedIndexedAccess": false,
+    "allowImportingTsExtensions": true
+  },
+  "include": [".claude-plugin/types", "hooks", "test"]
+}
