@@ -1,10 +1,21 @@
 {
   "name": "inline-images",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lets Claude show a screenshot or frame inline in the conversation, cropped and annotated with boxes and arrows.",
-  "author": { "name": "Nicolò Pignatelli", "url": "https://github.com/nicolopignatelli" },
+  "author": {
+    "name": "Nicolò Pignatelli",
+    "url": "https://github.com/nicolopignatelli"
+  },
   "homepage": "https://github.com/nicolopignatelli/claude-code-inline-images",
   "repository": "https://github.com/nicolopignatelli/claude-code-inline-images",
+  "privacyPolicyUrl": "https://github.com/nicolopignatelli/claude-code-inline-images/blob/main/PRIVACY.md",
   "license": "MIT",
-  "keywords": ["images", "screenshots", "annotations", "terminal", "kitty", "ghostty"]
+  "keywords": [
+    "images",
+    "screenshots",
+    "annotations",
+    "terminal",
+    "kitty",
+    "ghostty"
+  ]
 }
