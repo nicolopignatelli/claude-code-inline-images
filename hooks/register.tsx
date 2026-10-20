@@ -35,7 +35,7 @@ type Shown = {
   inline: { width: number; height: number }
 }
 
-const DESCRIPTION = `Show an image inline in the conversation, optionally cropped and annotated with boxes and arrows, so the person sees exactly what you are pointing at. Use it whenever a visual detail is under discussion: a UI screenshot, a frame you extracted from a video, a diagram.
+const DESCRIPTION = `Show an image to the person, inline in the conversation. It is the way to show them any image you want them to look at: a screenshot, a frame you extracted from a video, a diagram, an asset you made. With only a path it shows the whole image; crop it and add boxes and arrows when you are pointing at something in it.
 
 The image must be a PNG file. Every coordinate is a fraction of the ORIGINAL image (x: 0 left edge, 1 right edge; y: 0 top, 1 bottom), whatever size you viewed it at. A box is its top-left corner plus width and height; an arrow points from "from" to "to", so put "to" on the thing you mean. Give a short label to what you name; labelled shapes are numbered in the picture and listed in the caption.
 

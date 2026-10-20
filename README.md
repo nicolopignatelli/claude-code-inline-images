@@ -30,7 +30,7 @@ In the Claude desktop app, where `/plugin` does not run: click **+** next to the
 
 ## Using it
 
-You don't call it yourself. The mod gives Claude a tool, `show`, and Claude uses it whenever a visual detail comes up. You can also ask for it directly:
+You don't call it yourself. The mod gives Claude a tool, `show`, and Claude uses it whenever it wants you to look at an image: a whole screenshot, an asset it made, or a crop with the detail it means marked on it. You can also ask for it directly:
 
 - "Take a screenshot of the checkout page and show me what's misaligned."
 - "Crop to the header and point at the logo you mean."
