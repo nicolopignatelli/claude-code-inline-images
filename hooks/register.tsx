@@ -16,6 +16,10 @@ const CELL_ASPECT = 2
 const MAX_ROWS = 40
 const MAX_COLUMNS = 120
 
+// Drawn instead of the picture where the terminal cannot show one, right
+// above the caption, so it says what to do rather than repeating the caption.
+const NO_PICTURE = "This terminal can't show the picture; open the link below to see it."
+
 type ShowInput = {
   path: string
   crop?: Rect
@@ -177,7 +181,7 @@ export const register: Register = on => {
       }
       return (
         <Box flexDirection="column">
-          {png ? <Image source={{ png }} columns={columns} rows={rows} alt={shown.caption ?? 'image'} /> : null}
+          {png ? <Image source={{ png }} columns={columns} rows={rows} alt={NO_PICTURE} /> : null}
           {lines.map(line => (
             <Text>{line}</Text>
           ))}

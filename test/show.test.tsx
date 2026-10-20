@@ -61,7 +61,7 @@ test('a cropped, annotated image is written inline and as SVG, and drawn in the 
   const props = { tool_use_id: id, tool: TOOL, output: '', isErrored: false }
   const terminal = await $.ui.mount({ plugin: 'inline-images', surface: 'terminal', component: 'ToolResult', requestId: id, props })
   const image = await terminal.find({ type: 'Image' })
-  expect(image?.props.alt).toBe('The button is clipped')
+  expect(image?.props.alt).toBe("This terminal can't show the picture; open the link below to see it.")
   expect(await terminal.find({ type: 'Text', text: '1  the <button>' })).toBeDefined()
   expect((await terminal.find({ type: 'Link' }))?.props.href).toBe(`file://${DIR}/${id}.svg`)
   await terminal.unmount()

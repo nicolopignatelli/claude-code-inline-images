@@ -33,7 +33,7 @@ Two layout bugs on the sign-up form
 file:///var/folders/…/T/claude-inline-images/toolu_01L2ZM3hJG7jz1J9tXhNCwbg.svg
 ```
 
-In any other terminal you get the four text lines. Click the `file://` line, or open the path, to see the SVG copy with the labels as text:
+In any other terminal, a first line says the picture can't be shown there, followed by the same four lines. Click the `file://` line, or open the path, to see the SVG copy with the labels as text:
 
 ![The SVG copy](signup-svg.png)
 
