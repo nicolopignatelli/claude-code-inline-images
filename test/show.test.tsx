@@ -72,6 +72,29 @@ test('a cropped, annotated image is written inline and as SVG, and drawn in the 
   await desktop.unmount()
 })
 
+test('the size sets how much room the picture takes, medium when none is given', async ($, on) => {
+  const files = new Map([['/work/shot.png', whiteImage(400, 200).toBase64()]])
+  engine(on, files)
+  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
+
+  const drawn = async (size?: string) => {
+    await $.tool.call({ tool: TOOL, path: '/work/shot.png', ...(size ? { size } : {}) })
+    const svgPath = [...files.keys()].filter(p => p.endsWith('.svg')).at(-1)!
+    const id = svgPath.slice(DIR.length + 1, -'.svg'.length)
+    const props = { tool_use_id: id, tool: TOOL, output: '', isErrored: false }
+    const terminal = await $.ui.mount({ plugin: 'inline-images', surface: 'terminal', component: 'ToolResult', requestId: id, props })
+    const image = await terminal.find({ type: 'Image' })
+    await terminal.unmount()
+    for (const p of [...files.keys()]) if (p.startsWith(`${DIR}/${id}.`)) files.delete(p)
+    return { columns: image?.props.columns, rows: image?.props.rows }
+  }
+
+  // A 2:1 picture fills the row limit before the column limit at small.
+  expect(await drawn('small')).toEqual({ columns: 48, rows: 12 })
+  // At medium it is held by the 80-column terminal the mount assumes.
+  expect(await drawn()).toEqual({ columns: 76, rows: 19 })
+})
+
 test('a file that is not a PNG is refused with what to do', async ($, on) => {
   const files = new Map([['/work/photo.jpg', new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0]).toBase64()]])
   engine(on, files)

@@ -57,6 +57,7 @@ Claude Code draws inline pictures only with the kitty graphics protocol. That's 
 - **An arrow** goes from `from` to `to`. Its tip is on the thing Claude means.
 - **A label** numbers the shape. The inline picture shows the number in a marker, and the caption lists the labels by number. The SVG draws the label text beside the shape.
 - **A crop** shows just part of the image, also in fractions of the original.
+- **A size** sets how much room the picture takes in the conversation: `small` for a detail or a few lines, `medium` (the default) for a section, `large` for a whole screen.
 
 The tool's full input:
 
@@ -68,7 +69,8 @@ The tool's full input:
     { "kind": "box", "x": 0.546, "y": 0.646, "width": 0.134, "height": 0.07, "label": "the button label is clipped" },
     { "kind": "arrow", "from": { "x": 0.82, "y": 0.43 }, "to": { "x": 0.652, "y": 0.485 }, "label": "the email field is narrower than the others" }
   ],
-  "caption": "Two layout bugs on the sign-up form"
+  "caption": "Two layout bugs on the sign-up form",
+  "size": "medium"
 }
 ```
 

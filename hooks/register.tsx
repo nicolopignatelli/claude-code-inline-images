@@ -13,8 +13,15 @@ const IMAGE_MAX_BYTES = 2 * 1024 * 1024
 
 // A terminal cell is about twice as tall as it is wide.
 const CELL_ASPECT = 2
-const MAX_ROWS = 40
-const MAX_COLUMNS = 120
+
+// The most room a picture takes in the transcript, per size. The picture keeps
+// its aspect inside that box, so one of the two limits is usually not reached.
+const SIZES = {
+  small: { rows: 12, columns: 60 },
+  medium: { rows: 22, columns: 100 },
+  large: { rows: 36, columns: 120 },
+} as const
+type Size = keyof typeof SIZES
 
 // Drawn instead of the picture where the terminal cannot show one, right
 // above the caption, so it says what to do rather than repeating the caption.
@@ -25,6 +32,7 @@ type ShowInput = {
   crop?: Rect
   annotations?: Annotation[]
   caption?: string
+  size?: Size
 }
 
 /** What the tool leaves beside its files for the transcript row to draw from. */
@@ -33,11 +41,16 @@ type Shown = {
   caption?: string
   legend: string[]
   inline: { width: number; height: number }
+  size: Size
 }
 
 const DESCRIPTION = `Show an image to the person, inline in the conversation. It is the way to show them any image you want them to look at: a screenshot, a frame you extracted from a video, a diagram, an asset you made. With only a path it shows the whole image; crop it and add boxes and arrows when you are pointing at something in it.
 
 The image must be a PNG file. Every coordinate is a fraction of the ORIGINAL image (x: 0 left edge, 1 right edge; y: 0 top, 1 bottom), whatever size you viewed it at. A box is its top-left corner plus width and height; an arrow points from "from" to "to", so put "to" on the thing you mean. Give a short label to what you name; labelled shapes are numbered in the picture and listed in the caption.
+
+Pick the size for what you show: small for a detail or a few lines, medium (the default) for a section, large for a whole screen the person should read.
+
+To quote a web page, screenshot it to a PNG file with a browser tool first, then show that file.
 
 The person sees the picture inline where their terminal can draw images, and always a file:// link to an SVG copy with the labels as text, which opens in an IDE or browser.`
 
@@ -81,6 +94,11 @@ const INPUT_SCHEMA = {
       },
     },
     caption: { type: 'string', description: 'One line shown under the picture.' },
+    size: {
+      type: 'string',
+      enum: Object.keys(SIZES),
+      description: 'How much room the picture takes in the conversation: small, medium (the default) or large.',
+    },
   },
   required: ['path'],
 }
@@ -143,7 +161,13 @@ export const register: Register = on => {
     const dir = await outputDir($)
     const svgPath = `${dir}/${input.tool_use_id}.svg`
     const legend = annotations.flatMap(a => (a.label ? [a.label] : [])).map((label, i) => `${i + 1}  ${label}`)
-    const shown: Shown = { svgPath, caption: input.caption, legend, inline: { width: inline.width, height: inline.height } }
+    const shown: Shown = {
+      svgPath,
+      caption: input.caption,
+      legend,
+      inline: { width: inline.width, height: inline.height },
+      size: input.size ?? 'medium',
+    }
     await $.fs.write(svgPath, svg)
     await $.fs.write(`${dir}/${input.tool_use_id}.png.b64`, png.toBase64())
     await $.fs.write(`${dir}/${input.tool_use_id}.json`, JSON.stringify(shown))
@@ -173,10 +197,12 @@ export const register: Register = on => {
       const { Box, Text, Link, Image } = $.ui.resolve(e)
       const png = await $.fs.read(`${dir}/${id}.png.b64`).catch(() => undefined)
       const { width, height } = shown.inline
-      let columns = Math.min(MAX_COLUMNS, Math.max(10, (e.viewport?.columns ?? 80) - 4), width)
+      // Pictures shown before sizes existed have none and draw as medium.
+      const room = SIZES[shown.size] ?? SIZES.medium
+      let columns = Math.min(room.columns, Math.max(10, (e.viewport?.columns ?? 80) - 4))
       let rows = Math.max(1, Math.round((columns * height) / width / CELL_ASPECT))
-      if (rows > MAX_ROWS) {
-        rows = MAX_ROWS
+      if (rows > room.rows) {
+        rows = room.rows
         columns = Math.max(1, Math.round((rows * CELL_ASPECT * width) / height))
       }
       return (
